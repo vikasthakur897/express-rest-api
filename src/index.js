@@ -4,6 +4,9 @@ import cors from 'cors';
 import pool from './config/db.js';
 import userRouter from './routes/userRouter.js'
 import errorHandler from './middlewares/error-handler.js';
+import { createUserTable } from './data/createUserTable.js';
+
+
 dotenv.config();
 
 const app = express();
@@ -19,11 +22,20 @@ app.use(cors());
 
 app.use(errorHandler);
 
+//Create user table if it doesn't exist
+ createUserTable();
+
 //Routes
 
-app.get('/api', userRouter);
+app.get('/', (req, res) => {
+    res.send('Welcome to the REST API'); 
+   });
 
-app.get('/', async(req, res) => {
+app.use('/api', userRouter);
+
+
+
+app.get('/check-database', async(req, res) => {
     const result = await pool.query('SELECT current_database()');
     res.send(`Connected to database: ${result.rows[0].current_database}`);
 })

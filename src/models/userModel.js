@@ -1,6 +1,6 @@
 import pool from '../config/db.js';
 
-export const getallUsersService = async() => {
+export const getAllUsersService = async() => {
     const result = await pool.query('SELECT * FROM users');
 
     if (result.rows.length === 0) {
